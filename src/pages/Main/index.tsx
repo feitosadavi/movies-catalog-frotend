@@ -37,7 +37,6 @@ function Main () {
       const skip = page === 1 ? 0 : (page * ITENS_PER_PAGE) - ITENS_PER_PAGE
       const { movies, totalCount } = await api.getMovies({ limit: ITENS_PER_PAGE, skip })
       window.scrollTo({ top: 0, behavior: 'smooth' })
-      console.log({ movies })
       setMovies(movies)
       setNumberOfMovies(totalCount)
     } catch (error) {
