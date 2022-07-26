@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 
 import ImageList from '@mui/material/ImageList';
@@ -7,7 +8,7 @@ import PaginationItem from '@mui/material/PaginationItem';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-import { getMovies } from 'lib/api';
+import api from 'lib/api';
 import { Movie } from 'types/';
 import * as S from './styles'
 import { Card } from 'components/';
@@ -29,45 +30,72 @@ function Main () {
   const [movies, setMovies] = React.useState<Movie[]>([])
   const [numberOfMovies, setNumberOfMovies] = React.useState<number>(0)
   const [page, setPage] = React.useState<number>(getCurrentPageFromUrl() ?? 1)
+  const [cleanCatalog, setCleanCatalog] = React.useState<boolean>(false)
   const [updateCatalog, setUpdateCatalog] = React.useState<boolean>(false)
   const [loading, setLoading] = React.useState<boolean>(false)
 
+  const fetchGetMovies = async () => {
+    try {
+      const skip = page === 1 ? 0 : (page * ITENS_PER_PAGE) - ITENS_PER_PAGE
+      const { movies, totalCount } = await api.getMovies({ limit: ITENS_PER_PAGE, skip })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      console.log({ movies })
+      setMovies(movies)
+      setNumberOfMovies(totalCount)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   React.useEffect(() => {
     setLoading(true)
-    console.log(page === 1 ? 0 : page * ITENS_PER_PAGE)
-    getMovies({ limit: ITENS_PER_PAGE, skip: page === 1 ? 0 : (page * ITENS_PER_PAGE) - ITENS_PER_PAGE })
-      .then(({ movies, totalCount }) => {
-        setMovies(movies)
-        setNumberOfMovies(totalCount)
-      })
-      .catch(console.error)
-      .finally(() => setTimeout(() => setLoading(false), 800))
+    fetchGetMovies()
+      .finally(() => setTimeout(() => setLoading(false), 750))
   }, [page])
+
+  React.useEffect(() => {
+    setLoading(true)
+    api.deleteMovies()
+      .then(res => setMovies([]))
+      .catch(console.error)
+      .finally(() => setLoading(false))
+  }, [cleanCatalog])
+
+  React.useEffect(() => {
+    setLoading(true)
+    api.updateCatalog()
+      .then(res => fetchGetMovies())
+      .catch(console.error)
+      .finally(() => setTimeout(() => setLoading(false), 750))
+  }, [updateCatalog])
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
     changeUrl(value)
   } 
-  const handleClick = () => setUpdateCatalog(!updateCatalog)
+  const handleClick = () => setCleanCatalog(!cleanCatalog)
+  const handleUpdateCatalog = () => setUpdateCatalog(!updateCatalog)
 
   return (
     <S.Container>
       <S.Wrapper>
         <S.Header>
           <h1>Studio Ghibli - Catálogo</h1>
-          <button onClick={handleClick}>Atualizar catálogo</button>
+          <button onClick={handleClick}>Limpar catálogo</button>
         </S.Header>
         <ImageList variant="masonry" cols={3} gap={10}>
-          {movies.map((movie) => (
-            <ImageListItem key={movie._id}>
-              <Card movie={movie} loading={loading} />
-            </ImageListItem>
-          ))
+          {movies.length > 0 ?
+            movies.map((movie) => (
+              <ImageListItem key={movie._id}>
+                <Card movie={movie} loading={loading} />
+              </ImageListItem>
+            ))
+            : <button onClick={handleUpdateCatalog}>Atualizar catálogo</button>
           }
         </ImageList>
       </S.Wrapper>
       <Pagination
-        sx={{ padding: '1rem' }}
+        sx={{ marginTop: '5rem' }}
         count={Math.ceil(numberOfMovies / ITENS_PER_PAGE)}
         page={page}
         onChange={handlePageChange}

@@ -3,13 +3,16 @@ import { Movie } from 'types/';
 const API = "http://localhost:3333/api";
 const endpoint = (path: string): string => API + path;
 
-const get = async (path: string): Promise<any> => {
+const toGet = async (path: string): Promise<any> => {
   const res = await fetch(endpoint(path))
-  const json = await res.json()
-  return json
+  if (res.status === 204) {
+    return res.status
+  } else {
+    return res.json()
+  }
 };
 
-const post = async (path: string, body: any): Promise<any> => {
+const toPost = async (path: string, body: any): Promise<any> => {
   return fetch(endpoint(path), {
     method: 'post',
     body: JSON.stringify(body),
@@ -18,6 +21,17 @@ const post = async (path: string, body: any): Promise<any> => {
       'Content-Type': 'application/json'
     }
   }).then((res) => res.json());
+};
+
+const toDelete = async (path: string): Promise<any> => {
+  const res = await fetch(endpoint(path), {
+    method: 'delete',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  return res.status
 };
 
 
@@ -29,8 +43,20 @@ type GetMoviesOutput = {
   movies: Movie[]
   totalCount: number
 }
-export const getMovies = async ({ limit, skip }: GetMoviesInput): Promise<GetMoviesOutput> => {
-  const movies = await get(`/get-movies?limit=${limit}&skip=${skip}`)
-  console.log(movies)
-  return movies
+
+const api = {
+  getMovies: async ({ limit, skip }: GetMoviesInput): Promise<GetMoviesOutput> => {
+    const movies = await toGet(`/get-movies?limit=${limit}&skip=${skip}`)
+    return movies
+  },
+
+  deleteMovies: async (): Promise<void> => {
+    await toDelete(`/movies/delete`)
+  },
+
+  updateCatalog: async (): Promise<void> => {
+    await toGet(`/save-movies`)
+  }
 }
+
+export default api
