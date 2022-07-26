@@ -13,7 +13,6 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: gray;
   width: 70rem;
   height: 100%;
 `

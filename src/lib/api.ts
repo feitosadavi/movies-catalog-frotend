@@ -25,8 +25,12 @@ type GetMoviesInput = {
   limit?: number
   skip?: number
 }
-export const getMovies = async ({ limit, skip }: GetMoviesInput): Promise<Movie[]> => {
-  const movies = await get(`/get-movies?limit=${limit}&skip${skip}`)
+type GetMoviesOutput = {
+  movies: Movie[]
+  totalCount: number
+}
+export const getMovies = async ({ limit, skip }: GetMoviesInput): Promise<GetMoviesOutput> => {
+  const movies = await get(`/get-movies?limit=${limit}&skip=${skip}`)
   console.log(movies)
   return movies
 }
