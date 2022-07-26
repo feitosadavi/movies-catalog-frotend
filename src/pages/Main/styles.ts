@@ -6,7 +6,7 @@ export const Container = styled.main`
   flex-direction: column;
 
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 `
 
 export const Wrapper = styled.div`
