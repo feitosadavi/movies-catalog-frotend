@@ -30,8 +30,6 @@ function Main () {
   const [movies, setMovies] = React.useState<Movie[]>([])
   const [numberOfMovies, setNumberOfMovies] = React.useState<number>(0)
   const [page, setPage] = React.useState<number>(getCurrentPageFromUrl() ?? 1)
-  const [cleanCatalog, setCleanCatalog] = React.useState<boolean>(false)
-  const [updateCatalog, setUpdateCatalog] = React.useState<boolean>(false)
   const [loading, setLoading] = React.useState<boolean>(false)
 
   const fetchGetMovies = async () => {
@@ -53,28 +51,24 @@ function Main () {
       .finally(() => setTimeout(() => setLoading(false), 750))
   }, [page])
 
-  React.useEffect(() => {
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+    changeUrl(value)
+  }
+  const handleClick = () => {
     setLoading(true)
     api.deleteMovies()
       .then(res => setMovies([]))
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [cleanCatalog])
-
-  React.useEffect(() => {
+  }
+  const handleUpdateCatalog = () => {
     setLoading(true)
     api.updateCatalog()
       .then(res => fetchGetMovies())
       .catch(console.error)
       .finally(() => setTimeout(() => setLoading(false), 750))
-  }, [updateCatalog])
-
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
-    changeUrl(value)
-  } 
-  const handleClick = () => setCleanCatalog(!cleanCatalog)
-  const handleUpdateCatalog = () => setUpdateCatalog(!updateCatalog)
+  }
 
   return (
     <S.Container>
@@ -83,17 +77,23 @@ function Main () {
           <h1>Studio Ghibli - Catálogo</h1>
           <button onClick={handleClick}>Limpar catálogo</button>
         </S.Header>
-        <ImageList variant="masonry" cols={3} gap={10}>
-          {movies.length > 0 ?
-            movies.map((movie) => (
+        {movies.length > 0
+          ?
+          <ImageList variant="masonry" cols={3} gap={10}>
+            {movies.map((movie) => (
               <ImageListItem key={movie._id}>
                 <Card movie={movie} loading={loading} />
               </ImageListItem>
-            ))
-            : <button onClick={handleUpdateCatalog}>Atualizar catálogo</button>
-          }
-        </ImageList>
+            ))}
+          </ImageList>
+          :
+          <S.UpdateCatalog>
+            <span>Parece que não há filmes no catálogo :(</span>
+            <button onClick={handleUpdateCatalog}>Atualizar catálogo</button>
+          </S.UpdateCatalog>
+        }
       </S.Wrapper>
+
       <Pagination
         sx={{ marginTop: '5rem' }}
         count={Math.ceil(numberOfMovies / ITENS_PER_PAGE)}
