@@ -8,22 +8,21 @@ import ImageListItem from '@mui/material/ImageListItem';
 import { Card } from 'components/';
 
 function Main () {
-  const PAGE_ITEMS = 10
+  const ITENS_PER_PAGE = 10
   const [movies, setMovies] = React.useState<Movie[]>([])
   const [updateCatalog, setUpdateCatalog] = React.useState<boolean>(false)
   const [loading, setLoading] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     setLoading(true)
-    getMovies({ limit: PAGE_ITEMS })
+    getMovies({ limit: ITENS_PER_PAGE })
       .then((payload) => setMovies(payload))
       .catch(console.error)
-      .finally(() => setLoading(false))
+      .finally(() => setTimeout(() => setLoading(false), 800))
   }, [])
 
   const handleClick = () => setUpdateCatalog(!updateCatalog)
 
-  if (loading) return <h1>Loading...</h1>
   return (
     <S.Container>
       <S.Wrapper>
@@ -34,9 +33,10 @@ function Main () {
         <ImageList variant="masonry" cols={3} gap={10}>
           {movies.map((movie) => (
             <ImageListItem key={movie._id}>
-              <Card key={movie._id} movie={movie} />
+              <Card movie={movie} loading={loading} />
             </ImageListItem>
-          ))}
+          ))
+          }
         </ImageList>
       </S.Wrapper>
     </S.Container>

@@ -6,19 +6,25 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
 import { Movie } from 'types/'
+import { CardSkeleton } from 'components/';
 
 interface Props {
   movie: Movie
+  loading: boolean
 }
 
-const Card: React.FC<Props> = ({ movie: {
-  _id,
-  title,
-  description,
-  banner,
-  producer,
-  director
-} }) => {
+const Card: React.FC<Props> = ({
+  movie: {
+    _id,
+    title,
+    description,
+    banner,
+    producer,
+    director
+  },
+  loading
+}) => {
+  if (loading) return <CardSkeleton />
   return (
     <MUICard sx={{ maxWidth: 345, marginBottom: '1rem' }}>
       <CardMedia
@@ -27,6 +33,7 @@ const Card: React.FC<Props> = ({ movie: {
         image={banner}
         alt="movie banner"
       />
+
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}
