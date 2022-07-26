@@ -3,13 +3,9 @@ import React from 'react';
 import { Movie } from 'types/';
 import * as S from './styles'
 
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
+import { Card } from 'components/';
 
 function Main () {
   const PAGE_ITEMS = 10
@@ -34,28 +30,7 @@ function Main () {
         <ImageList variant="masonry" cols={3} gap={10}>
           {movies.map((movie) => (
             <ImageListItem key={movie._id}>
-              <Card sx={{ maxWidth: 345, marginBottom: '1rem' }}>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={movie.banner}
-                  alt="movie banner"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {movie.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {movie.description}
-                  </Typography>
-                  <span>
-                    Producer: {movie.producer}
-                  </span>
-                  <span>
-                    Director: {movie.director}
-                  </span>
-                </CardContent>
-              </Card>
+              <Card key={movie._id} movie={movie} />
             </ImageListItem>
           ))}
         </ImageList>
