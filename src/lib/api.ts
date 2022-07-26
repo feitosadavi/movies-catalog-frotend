@@ -1,6 +1,6 @@
 import { Movie } from 'types/';
 
-const API = process.env.API_URL ?? "http://localhost:3333/api";
+const API = "https://moviescatalogapi.herokuapp.com/api";
 const endpoint = (path: string): string => API + path;
 
 const toGet = async (path: string): Promise<any> => {
