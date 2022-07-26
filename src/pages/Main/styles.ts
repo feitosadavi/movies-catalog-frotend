@@ -14,7 +14,8 @@ export const Wrapper = styled.div`
   align-items: center;
   flex-direction: column;
   width: 70rem;
-  height: 100%;
+  min-height: 100vh;
+  padding: 1rem;
 `
 
 export const Header = styled.div`
@@ -23,4 +24,14 @@ export const Header = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 5rem;
+`
+
+export const UpdateCatalog = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 50rem;
+  gap: 1rem;
 `
