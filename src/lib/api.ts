@@ -46,7 +46,7 @@ type GetMoviesOutput = {
 
 const api = {
   getMovies: async ({ limit, skip }: GetMoviesInput): Promise<GetMoviesOutput> => {
-    const movies = await toGet(`/get-movies?limit=${limit}&skip=${skip}`)
+    const movies = await toGet(`/movies?limit=${limit}&skip=${skip}`)
     return movies
   },
 
@@ -55,7 +55,7 @@ const api = {
   },
 
   updateCatalog: async (): Promise<void> => {
-    await toGet(`/save-movies`)
+    await toPost('/movies', {})
   }
 }
 
