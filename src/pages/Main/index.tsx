@@ -11,20 +11,24 @@ function Main () {
   const PAGE_ITEMS = 10
   const [movies, setMovies] = React.useState<Movie[]>([])
   const [updateCatalog, setUpdateCatalog] = React.useState<boolean>(false)
+  const [loading, setLoading] = React.useState<boolean>(false)
 
   React.useEffect(() => {
+    setLoading(true)
     getMovies({ limit: PAGE_ITEMS })
       .then((payload) => setMovies(payload))
       .catch(console.error)
+      .finally(() => setLoading(false))
   }, [])
 
   const handleClick = () => setUpdateCatalog(!updateCatalog)
 
+  if (loading) return <h1>Loading...</h1>
   return (
     <S.Container>
       <S.Wrapper>
         <S.Header>
-          <h1>Filmes do Studio Ghibli</h1>
+          <h1>Studio Ghibli - Catálogo</h1>
           <button onClick={handleClick}>Atualizar catálogo</button>
         </S.Header>
         <ImageList variant="masonry" cols={3} gap={10}>
