@@ -13,14 +13,19 @@ const toGet = async (path: string): Promise<any> => {
 };
 
 const toPost = async (path: string, body: any): Promise<any> => {
-  return fetch(endpoint(path), {
+  const res = await fetch(endpoint(path), {
     method: 'post',
     body: JSON.stringify(body),
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-  }).then((res) => res.json());
+  })
+  if (res.status === 204) {
+    return res.status
+  } else {
+    return res.json()
+  }
 };
 
 const toDelete = async (path: string): Promise<any> => {
@@ -33,7 +38,6 @@ const toDelete = async (path: string): Promise<any> => {
   })
   return res.status
 };
-
 
 type GetMoviesInput = {
   limit?: number
