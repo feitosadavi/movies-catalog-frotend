@@ -1,7 +1,35 @@
 
+# Movies Catalog Frontend 
+
+A Single Page App for Wa Project's Challenge
+
+
+
+## Tech Stack
+
+**Lib:** ReactJS
+
+**Lang:** Typescript
+
+**Stylization:** Styled Components and MUI
+
+**CI/CD:** Github Actions
+
+**Deploy:** Heroku
+
+
+
+## Features
+
+- Add new movies to database
+- Get Movies
+- Clear database
+
+
+
 ## Installation
 
-Install Corelab API Challenge with npm
+Install Movies Catalog Frontend with npm
 
  - Install docker
  - Install docker-compose
@@ -19,6 +47,10 @@ To run the project, you need to follow the steps above:
 
 
 ```bash
-  npm start (you should have a MongoDB instance running on 27017 port)
+  npm start 
 ```
     
+## Final Considerations
+
+It was amazing to work with this project. 
+Thanks for the opportunity and I hope we can chat soon! :blush:
