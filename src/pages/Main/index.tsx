@@ -12,6 +12,7 @@ import api from 'lib/api';
 import { Movie } from 'types/';
 import * as S from './styles'
 import { Card } from 'components/';
+import { Button } from '@mui/material';
 
 const getCurrentPageFromUrl = (): number | null => {
   const urlParams = new URLSearchParams(window.location.search)
@@ -54,7 +55,7 @@ function Main () {
     setPage(value)
     changeUrl(value)
   }
-  const handleClick = () => {
+  const handleClearCatalog = () => {
     setLoading(true)
     api.deleteMovies()
       .then(res => setMovies([]))
@@ -74,7 +75,7 @@ function Main () {
       <S.Wrapper>
         <S.Header>
           <h1>Studio Ghibli - Catálogo</h1>
-          <button onClick={handleClick}>Limpar catálogo</button>
+          <Button variant='outlined' color='error' onClick={handleClearCatalog}>Limpar catálogo</Button>
         </S.Header>
         {movies.length > 0
           ?
@@ -88,7 +89,7 @@ function Main () {
           :
           <S.UpdateCatalog>
             <span>Parece que não há filmes no catálogo :(</span>
-            <button onClick={handleUpdateCatalog}>Atualizar catálogo</button>
+            <Button variant='outlined' onClick={handleUpdateCatalog}>Atualizar catálogo</Button>
           </S.UpdateCatalog>
         }
       </S.Wrapper>

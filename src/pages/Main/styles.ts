@@ -24,6 +24,10 @@ export const Header = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 5rem;
+
+  h1 {
+    color: #1f1f1f;
+  }
 `
 
 export const UpdateCatalog = styled.div`
