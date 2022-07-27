@@ -16,6 +16,10 @@ export const Wrapper = styled.div`
   width: 70rem;
   min-height: 100vh;
   padding: 1rem;
+
+  @media screen and (max-width: 900px) {
+    width: 100%;
+  }
 `
 
 export const Header = styled.div`
@@ -27,6 +31,13 @@ export const Header = styled.div`
 
   h1 {
     color: #1f1f1f;
+  }
+
+  @media screen and (max-width: 900px) {
+    h1 {
+      font-size: 16pt
+    }
+    margin-bottom: 2rem;
   }
 `
 

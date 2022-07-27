@@ -7,6 +7,7 @@ import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import api from 'lib/api';
 import { Movie } from 'types/';
@@ -58,7 +59,7 @@ function Main () {
   const handleClearCatalog = () => {
     setLoading(true)
     api.deleteMovies()
-      .then(res => setMovies([]))
+      .then(res => { setMovies([]); setNumberOfMovies(0); setPage(1) })
       .catch(console.error)
       .finally(() => setLoading(false))
   }
@@ -70,6 +71,7 @@ function Main () {
       .finally(() => setTimeout(() => setLoading(false), 750))
   }
 
+  const mobile = useMediaQuery('(max-width:900px)');
   return (
     <S.Container>
       <S.Wrapper>
@@ -79,7 +81,7 @@ function Main () {
         </S.Header>
         {movies.length > 0
           ?
-          <ImageList variant="masonry" cols={3} gap={10}>
+          <ImageList variant="masonry" cols={mobile ? 1 : 3} gap={10}>
             {movies.map((movie) => (
               <ImageListItem key={movie._id}>
                 <Card movie={movie} loading={loading} />
@@ -89,7 +91,7 @@ function Main () {
           :
           <S.UpdateCatalog>
             <span>Parece que não há filmes no catálogo :(</span>
-            <Button variant='outlined' onClick={handleUpdateCatalog}>Atualizar catálogo</Button>
+            <Button variant='outlined' size={mobile ? 'small' : 'medium'} onClick={handleUpdateCatalog}>Atualizar catálogo</Button>
           </S.UpdateCatalog>
         }
       </S.Wrapper>
